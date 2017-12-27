@@ -1,0 +1,2 @@
+library(here)
+setwd(here())

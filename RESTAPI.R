@@ -1,11 +1,15 @@
 
+
+
+
 #* @get /geocode
 geocode <- function(location, state){
-  if(location == "USAFA"){
-    long = "38.9983? N"
-  }
-  
+  suppressMessages(library(dplyr))
+  Colorado <- tbl(US_db, "Colorado_data")
+  Addresses = as.data.frame(select(Colorado, Address, Long, Lat, State))
+  long = Addresses$Long
   long
   result = c(long, state)
   result
 }
+#select(flights_db, year:day, dep_delay, arr_delay)

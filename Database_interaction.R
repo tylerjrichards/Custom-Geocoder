@@ -27,10 +27,18 @@ Colorado_data <- Colorado %>%
   gs_read(ws = "Address_errors")
 
 #Now that we have the data, we need to create or update a database
+#we're going to create a database called US Geocoding and then add a table for each google sheet spreadsheet that we have
+#after we've done that, we can write new functions to update the database and add rows
 #we'll start with creating a new database
 
-Colorado_database <- src_sqlite("Colorado.db", create = TRUE)
+US_dat <- src_sqlite("US_Geocoding.db", create = TRUE)
 
-copy_to(Colorado_database, Colorado_data, temporary = FALSE)
 
-src_tbls(Colorado_database)
+#now let's add our googlesheets data to the database
+copy_to(US_dat, Colorado_data, temporary = FALSE)
+
+#and that's how we create and update a database in R
+#the reason why we do this is because we want to create a step inbetween editing a googlesheet and returning different values from our geocoding API
+
+
+

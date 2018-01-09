@@ -2,6 +2,7 @@ suppressMessages(library(here))
 library(data.table)
 library(dbplyr)
 suppressMessages(library(dplyr))
+suppressMessages(library(RSQLite))
 setwd(here())
 
 

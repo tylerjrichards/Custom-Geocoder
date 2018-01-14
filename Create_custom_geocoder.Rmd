@@ -1,20 +1,18 @@
 ---
-title: "Creating and Using a Custom Geocoder in R"
+title: "Creating a Custom Geocoder in R"
 author: "Tyler Richards"
-date: "`r Sys.Date()`"
 output:
   prettydoc::html_pretty:
-    theme: leonids
+    theme: hpstr
     highlight: github
 ---
 
-##Starting Out
 
 There are already many useful geocoders. From [Google's API](https://developers.google.com/maps/documentation/geocoding/start) to [MapQuest's](https://developer.mapquest.com/documentation/geocoding-api/) to even [OpenStreetMap's version](http://geocoder.readthedocs.io/providers/OpenStreetMap.html). However, if these do not get the job done, or are giving you incorrect results, you may want to create your own.  
   
-This tutorial will walk through how to make a geocoder by creating a database, making it accessible and editable from google spreadsheets for usability, and then accessing the database accessible through the use of a REST API. 
+This tutorial will walk through how to make a geocoder by creating a database, making it accessible and editable from google spreadsheets for usability, and then accessing the database accessible through the use of a REST API and will use the plumbr, googlesheets, and dbplyr packages.  
 
-##The Database and Google Sheets
+##Google Sheets meets Databases
 
 Thanks to [Jenny Bryan](https://twitter.com/JennyBryan), interacting with sheets is made easier through the [googlesheets package](https://cran.r-project.org/web/packages/googlesheets/vignettes/basic-usage.html). 
 
@@ -102,18 +100,22 @@ r$run(port=8000)
 
 ```
 
-There are a few ways to test out your new geocoder. You can use httr or curl and pass http://localhost:8000/geocode?location="example_address"&state="example_state" to it, or you can just go to the link itself in chrome and the result will be shown on your browser.  
+There are a few ways to test out your new geocoder. You can use httr or curl and pass [http://localhost:8000/geocode?location="example_address"&state="example_state"](http://localhost:8000/geocode?location="example_address"&state="example_state") to it, or you can just go to the link itself in chrome and the result will be shown on your browser.  
+
+
+##Tunneling  
 
 Once you have this API running, you need to expose it so that others can access it remotely. I used [Local tunnel](https://localtunnel.github.io/www/) for this initially, but then moved to [ngrok](https://ngrok.com/) because it has better features (lots of demo capabilities, an incredible UI for viewing the HTTP traffic, etc).  
-There is easy to use [documentation](https://ngrok.com/docs) but the bird's eye view steps are 
-1. Download ngrok
-2. Create an account
-3. Run ngrok http 8000 on your command prompt
+There is easy to use [documentation](https://ngrok.com/docs) but the bird's eye view steps are  
+1. Download ngrok  
+2. Create an account  
+3. Run ngrok http 8000 on your command prompt  
 
-That should be it! Now you've got your own fully-functioning geocoder.    
-Some notes and next steps:  
-1. Consider adding security features (passwords for geocoder access) if your data is confidential
-2. If addresses don't exactly match up, use fuzzy matching to return the closest match
+That should be it! Now you've got your own fully-functioning geocoder. If you have any questions or comments, reach out via [email](mailto:tylerjrichards@gmail.com).    
+  
+Some notes and next steps:   
+1. Consider adding security features (passwords for geocoder access) if your data is confidential  
+2. If addresses don't exactly match up, use fuzzy matching to return the closest match  
 3. Use [AWS](https://aws.amazon.com/api-gateway/), [Domino](https://support.dominodatalab.com/hc/en-us/articles/204173149-API-Endpoints-Model-Deployment), another hosting service to host the API. 
 
 

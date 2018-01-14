@@ -152,7 +152,8 @@ r<span class="op">$</span><span class="kw">run</span>(<span class="dt">port=</sp
 <p>Once you have this API running, you need to expose it so that others can access it remotely. I used <a href="https://localtunnel.github.io/www/">Local tunnel</a> for this initially, but then moved to <a href="https://ngrok.com/">ngrok</a> because it has better features (lots of demo capabilities, an incredible UI for viewing the HTTP traffic, etc).<br />
 There is easy to use <a href="https://ngrok.com/docs">documentation</a> but the bird’s eye view steps are 1. Download ngrok 2. Create an account 3. Run ngrok http 8000 on your command prompt</p>
 <p>That should be it! Now you’ve got your own fully-functioning geocoder.<br />
-Some notes and things to consider:</p>
+Some notes and next steps:<br />
+1. Consider adding security features (passwords for geocoder access) if your data is confidential 2. If addresses don’t exactly match up, use fuzzy matching to return the closest match 3. Use <a href="https://aws.amazon.com/api-gateway/">AWS</a>, <a href="https://support.dominodatalab.com/hc/en-us/articles/204173149-API-Endpoints-Model-Deployment">Domino</a>, another hosting service to host the API.</p>
 </div>
 </article>
 </div>

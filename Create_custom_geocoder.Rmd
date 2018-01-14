@@ -110,7 +110,12 @@ There is easy to use [documentation](https://ngrok.com/docs) but the bird's eye 
 2. Create an account
 3. Run ngrok http 8000 on your command prompt
 
-That should be it! Now you've got your own fully-functioning geocoder.  
-Some notes and things to consider:
+That should be it! Now you've got your own fully-functioning geocoder.    
+Some notes and next steps:  
+1. Consider adding security features (passwords for geocoder access) if your data is confidential
+2. If addresses don't exactly match up, use fuzzy matching to return the closest match
+3. Use [AWS](https://aws.amazon.com/api-gateway/), [Domino](https://support.dominodatalab.com/hc/en-us/articles/204173149-API-Endpoints-Model-Deployment), another hosting service to host the API. 
+
+
 
 

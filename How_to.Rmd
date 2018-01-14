@@ -1,16 +1,16 @@
 ---
 title: "Creating and Using a Custom Geocoder in R"
-author: "Document Author"
+author: "Tyler Richards"
 date: "`r Sys.Date()`"
 output:
   prettydoc::html_pretty:
-    theme: architect
+    theme: leonids
     highlight: github
 ---
 
-#Overview
+##Starting Out
 
-There are already many very useful and good geocoders. From [Google's API](https://developers.google.com/maps/documentation/geocoding/start) to [MapQuest's](https://developer.mapquest.com/documentation/geocoding-api/) to even [OpenStreetMap's version](http://geocoder.readthedocs.io/providers/OpenStreetMap.html). However, if these do not get the job done, or are giving you incorrect results, you may want to create your own.  
+There are already many useful geocoders. From [Google's API](https://developers.google.com/maps/documentation/geocoding/start) to [MapQuest's](https://developer.mapquest.com/documentation/geocoding-api/) to even [OpenStreetMap's version](http://geocoder.readthedocs.io/providers/OpenStreetMap.html). However, if these do not get the job done, or are giving you incorrect results, you may want to create your own.  
   
 This tutorial will walk through how to make a geocoder by creating a database, making it accessible and editable from google spreadsheets for usability, and then accessing the database accessible through the use of a REST API. 
 
@@ -50,11 +50,67 @@ In my use case, I needed to make a database for the United States and then a tab
 
 ```{r eval = F}
 library(dbplyr)
+#create a new database
 US_dat <- src_sqlite("US_Geocoding.db", create = TRUE)
 
+#add a new table
 copy_to(US_dat, Spreadsheet_data, temporary = FALSE)
 
 ```
 
+We're done creating the database we need, so now our next step is to create an API that allows us to access it. 
+
+## The API
+
+A REST framework stands for Representational State Transfer, which allows us to share conditioned data with others using the HTTP method use. What that means for us is we can take parameters (in our case, an address string and a state) and return the query in our database (longitude and latitude). We'll use the plumbr package for this process.  
+You should create a new file for this next section! The name of the file is important for this process.
+
+```{r eval = F}
+#at the top of the file, load any libraries that you need for database access
+suppressMessages(library(plumber))
+suppressMessages(library(dbplyr))
+suppressMessages(library(dplyr))
+
+#Load the database
+US_db <- src_sqlite("US_Geocoding.db", create = TRUE)
+suppressMessages(library(dplyr))
+
+#the next comment with the asterisk is added to the plumbr package knows we want to create an api. the @get is to create a get capacity (allowing users to get data, but not to change anything in our database), and the /geocode is to name the api function. 
+#after that, call on the database given the parameters and return the output.
+
+#* @get /geocode
+geocode <- function(location, state){
+
+  state_db <- tbl(US_db, state)
+  Addresses = as.data.frame(select(state_db, Address, Long, Lat, State))
+  long = Addresses$Long
+  long
+  lat = Addresses$Lat
+  result = c(long, lat, state)
+  result
+}
+
+
+```
+
+Congrats! You've made your api. Now run the lines below in your console to start up the API that will run on your 8000 port. 
+
+```{r eval = F}
+library(plumber)
+r <- plumb("myfile.R")
+r$run(port=8000)
+
+```
+
+There are a few ways to test out your new geocoder. You can use httr or curl and pass http://localhost:8000/geocode?location="example_address"&state="example_state" to it, or you can just go to the link itself in chrome and the result will be shown on your browser.  
+
+Once you have this API running, you need to expose it so that others can access it remotely. I used [Local tunnel](https://localtunnel.github.io/www/) for this initially, but then moved to [ngrok](https://ngrok.com/) because it has better features (lots of demo capabilities, an incredible UI for viewing the HTTP traffic, etc).  
+There is easy to use [documentation](https://ngrok.com/docs) but the bird's eye view steps are 
+1. Download ngrok
+2. Create an account
+3. Run ngrok http 8000 on your command prompt
+
+That should be it! Now you've got your own fully-functioning geocoder.  
+Some notes and things to consider:
 
 

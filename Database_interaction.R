@@ -19,7 +19,7 @@ Colorado_url <- "https://docs.google.com/spreadsheets/d/19l0yoBkS_NscBbKG4vg92OL
 Colorado <-Colorado_url %>% 
   gs_url()
 
-Colorado_data <- Colorado %>% 
+Colorado_data <- Colo`rado %>% 
   gs_read(ws = "Address_errors")
 
 #Or we can do the same thing by name
@@ -33,6 +33,7 @@ Colorado_data <- Colorado %>%
 #we'll start with creating a new database
 
 US_dat <- src_sqlite("US_Geocoding.db", create = TRUE)
+
 
 
 #now let's add our googlesheets data to the database
